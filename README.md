@@ -1,48 +1,73 @@
-![Banner image](https://user-images.githubusercontent.com/10284570/173569848-c624317f-42b1-45a6-ab09-f0ea3c247648.png)
+# n8n-nodes-omie
 
-# n8n-nodes-starter
+This is an n8n community node. It lets you use GitHub Issues in your n8n workflows.
 
-This repo contains example nodes to help you get started building your own custom integrations for [n8n](https://n8n.io). It includes the node linter and other dependencies.
+[n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/sustainable-use-license/) workflow automation platform.
 
-To make your custom node available to the community, you must create it as an npm package, and [submit it to the npm registry](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry).
+[Installation](#installation)
+[Operations](#operations)
+[Credentials](#credentials)
+[Compatibility](#compatibility)
+[Usage](#usage)
+[Resources](#resources)
 
-If you would like your node to be available on n8n cloud you can also [submit your node for verification](https://docs.n8n.io/integrations/creating-nodes/deploy/submit-community-nodes/).
+## Installation
 
-## Prerequisites
+Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n community nodes documentation.
 
-You need the following installed on your development machine:
+## Operations
 
-* [git](https://git-scm.com/downloads)
-* Node.js and npm. Minimum version Node 20. You can find instructions on how to install both using nvm (Node Version Manager) for Linux, Mac, and WSL [here](https://github.com/nvm-sh/nvm). For Windows users, refer to Microsoft's guide to [Install NodeJS on Windows](https://docs.microsoft.com/en-us/windows/dev-environment/javascript/nodejs-on-windows).
-* Install n8n with:
-  ```
-  npm install n8n -g
-  ```
-* Recommended: follow n8n's guide to [set up your development environment](https://docs.n8n.io/integrations/creating-nodes/build/node-development-environment/).
+- Issues
+    - Get an issue
+    - Get many issues in a repository
+    - Create a new issue
+- Issue Comments
+    - Get many issue comments
 
-## Using this starter
+## Credentials
 
-These are the basic steps for working with the starter. For detailed guidance on creating and publishing nodes, refer to the [documentation](https://docs.n8n.io/integrations/creating-nodes/).
+You can use either access token or OAuth2 to use this node.
 
-1. [Generate a new repository](https://github.com/n8n-io/n8n-nodes-starter/generate) from this template repository.
-2. Clone your new repo:
-   ```
-   git clone https://github.com/<your organization>/<your-repo-name>.git
-   ```
-3. Run `npm i` to install dependencies.
-4. Open the project in your editor.
-5. Browse the examples in `/nodes` and `/credentials`. Modify the examples, or replace them with your own nodes.
-6. Update the `package.json` to match your details.
-7. Run `npm run lint` to check for errors or `npm run lintfix` to automatically fix errors when possible.
-8. Test your node locally. Refer to [Run your node locally](https://docs.n8n.io/integrations/creating-nodes/test/run-node-locally/) for guidance.
-9. Replace this README with documentation for your node. Use the [README_TEMPLATE](README_TEMPLATE.md) to get started.
-10. Update the LICENSE file to use your details.
-11. [Publish](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry) your package to npm.
+### Access token
 
-## More information
+1. Open your GitHub profile [Settings](https://github.com/settings/profile).
+2. In the left navigation, select [Developer settings](https://github.com/settings/apps).
+3. In the left navigation, under Personal access tokens, select Tokens (classic).
+4. Select Generate new token > Generate new token (classic).
+5. Enter a descriptive name for your token in the Note field, like n8n integration.
+6. Select the Expiration you'd like for the token, or select No expiration.
+7. Select Scopes for your token. For most of the n8n GitHub nodes, add the `repo` scope.
+    - A token without assigned scopes can only access public information.
+8. Select Generate token.
+9. Copy the token.
 
-Refer to our [documentation on creating nodes](https://docs.n8n.io/integrations/creating-nodes/) for detailed information on building your own nodes.
+Refer to [Creating a personal access token (classic)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic) for more information. Refer to Scopes for OAuth apps for more information on GitHub scopes.
 
-## License
+![Generated Access token in GitHub](https://docs.github.com/assets/cb-17251/mw-1440/images/help/settings/personal-access-tokens.webp)
 
-[MIT](https://github.com/n8n-io/n8n-nodes-starter/blob/master/LICENSE.md)
+### OAuth2
+
+If you're self-hosting n8n, create a new GitHub [OAuth app](https://docs.github.com/en/apps/oauth-apps):
+
+1. Open your GitHub profile [Settings](https://github.com/settings/profile).
+2. In the left navigation, select [Developer settings](https://github.com/settings/apps).
+3. In the left navigation, select OAuth apps.
+4. Select New OAuth App.
+    - If you haven't created an app before, you may see Register a new application instead. Select it.
+5. Enter an Application name, like n8n integration.
+6. Enter the Homepage URL for your app's website.
+7. If you'd like, add the optional Application description, which GitHub displays to end-users.
+8. From n8n, copy the OAuth Redirect URL and paste it into the GitHub Authorization callback URL.
+9. Select Register application.
+10. Copy the Client ID and Client Secret this generates and add them to your n8n credential.
+
+Refer to the [GitHub Authorizing OAuth apps documentation](https://docs.github.com/en/apps/oauth-apps/using-oauth-apps/authorizing-oauth-apps) for more information on the authorization process.
+
+## Compatibility
+
+Compatible with n8n@1.60.0 or later
+
+## Resources
+
+* [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
+* [GitHub API docs](https://docs.github.com/en/rest/issues)
