@@ -12,24 +12,28 @@ export class OmieAppApi implements ICredentialType {
   documentationUrl = 'https://docs.n8n.io/integrations/creating-nodes/build/declarative-style-node/';
   properties: INodeProperties[] = [
     {
-      displayName: 'API Key',
+      displayName: 'App Key',
       name: 'apiKey',
+			default: '',
+			description: 'Seu App Key da Omie',
+			placeholder: 'A App Key gerada no painel da Omie',
+			type: 'string',
       typeOptions: {
         password: true,
       },
       required: true,
-      type: 'string',
-      default: '',
     },
 		{
-			displayName: 'API Secret',
+			displayName: 'App Secret',
 			name: 'apiSecret',
+			default: '',
+			description: 'Seu App Secret da Omie',
+			placeholder: 'A App Secret gerada no painel da Omie',
+			type: 'string',
 			typeOptions: {
 				password: true,
 			},
 			required: true,
-			type: 'string',
-			default: '',
 		}
   ];
   authenticate: IAuthenticateGeneric = {

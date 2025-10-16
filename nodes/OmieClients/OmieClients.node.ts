@@ -4,8 +4,11 @@ import {
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
-	NodeConnectionTypes
+	NodeConnectionTypes,
 } from 'n8n-workflow';
+
+import {handleRequest} from './shared/handleRequest';
+import { getProperties } from './shared/getProperties';
 
 export class OmieClients implements INodeType {
 	description: INodeTypeDescription = {
@@ -28,98 +31,27 @@ export class OmieClients implements INodeType {
 				required: true,
 			},
 		],
-		properties: [
-			{
-				displayName: 'OMIE CALL',
-				name: 'OMIE_CALL',
-				type: 'options',
-				options: [
-					{
-						name: 'Listar Clientes',
-						value: 'listCustomers',
-					},
-					{
-						name: 'Consultar Cliente',
-						value: 'getCustomer',
-					},
-					{
-						name: 'Listar Clientes Resumido',
-						value: 'listCustomersSummary',
-					},
-				],
-				default: 'listCustomersSummary',
-				required: true,
-				noDataExpression: true,
-			},
-			{
-				displayName: 'Pagina',
-				name: 'pagina',
-				type: 'number',
-				placeholder: '10',
-				default: 1,
-				required: true,
-				description: 'Número da página a ser retornada (padrão: 1)',
-				typeOptions: {
-					minValue: 1,
-				}
-			},
-			{
-				displayName: 'Registros Por Pagina',
-				name: 'recordsPerPage',
-				type: 'number',
-				placeholder: '50',
-				default: 50,
-				required: true,
-				description: 'Número de registros por página (padrão: 50, máximo: 200)',
-				typeOptions: {
-					minValue: 1,
-				}
-			},
-		], // properties
+		properties: [...getProperties], // properties
 	}; // description
+
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
 		const returnData: IDataObject[] = [];
 
 		for (let i: number = 0; i < items.length; i++) {
-			const page = this.getNodeParameter('pagina', i) as string;
-			const recordsPerPage = this.getNodeParameter('recordsPerPage', i) as string;
 
-			const body: IDataObject = {
-				app_key: (await this.getCredentials('omieAppApi'))!.apiKey,
-				app_secret: (await this.getCredentials('omieAppApi'))!.apiSecret,
-				call: this.getNodeParameter('OMIE_CALL', i) as string,
-				param: [
-					{
-						pagina: page,
-						registros_por_pagina: recordsPerPage,
-						apenas_importado_api: 'N',
-						clientesFiltro: [
-							{
-								cnpj_cpf: '',
-							},
-						],
-					},
-				],
-			};
+			const call = this.getNodeParameter('call', i) as string;
+			const resultListKey = this.getNodeParameter('resultListKey', i) as string;
+			const recordsPerPage = this.getNodeParameter('recordsPerPage', i) as number;
 
-			const responseData = await this.helpers.httpRequest({
-				method: 'POST',
-				url: 'https://webhook.site/ca724c38-b9c9-4c35-a658-59e2341ce493',
-				body,
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json',
-				},
-			});
 
-			const results = Array.isArray(responseData) ? responseData : [responseData];
+			const results = await handleRequest.call(this, call, resultListKey, recordsPerPage)
+
+
 
 			for (const result of results) {
 				returnData.push({
-					json: {
-						...result
-					}
+					json: result as IDataObject,
 				});
 			}
 		}
