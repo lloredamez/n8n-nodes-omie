@@ -1,6 +1,13 @@
-export const getEndpointForCall = (call: string): string => {
-	if (call.toLowerCase().includes('cliente')) return 'geral/clientes';
-	if (call.toLowerCase().includes('produto')) return 'geral/produtos';
+export const getPropertiesForCall = (call: string): { endpoint: string, resultListKey: string } => {
+	if (call === 'ListarClientes') {
+		return {
+			endpoint: 'geral/clientes/',
+			resultListKey: 'clientes_cadastro'
+		};
+	}
 
-	return 'geral/clientes';
-};
+	return {
+		endpoint: 'geral/clientes/',
+		resultListKey: 'clientes_cadastro'
+	};
+}

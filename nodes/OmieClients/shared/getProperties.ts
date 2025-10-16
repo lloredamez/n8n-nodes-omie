@@ -12,26 +12,17 @@ export const getProperties: INodeProperties[] = [
 			},
 			{
 				name: 'Consultar Cliente',
-				value: 'getCustomer',
+				value: 'ConsultarCliente',
 			},
 			{
 				name: 'Listar Clientes Resumido',
-				value: 'listCustomersSummary',
+				value: 'ListarClientesResumido',
 			},
 		],
 		default: 'ListarClientes',
 		required: true,
 		description: 'The method name to call on the Omie API',
 		placeholder: 'Ex: ListarClientes, ListarPedidos, etc.',
-	},
-	{
-		displayName: 'Result List Key',
-		name: 'resultListKey',
-		type: 'string',
-		default: 'clientes_cadastrados',
-		required: true,
-		description: 'The name of the array key in the JSON response that contains the results',
-		placeholder: 'Ex: clientes_cadastrados, pedido_venda_produto',
 	},
 	{
 		displayName: 'Records Per Page',

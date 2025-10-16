@@ -1,15 +1,14 @@
 import {
-	IHookFunctions,
+	GenericValue,
+	IDataObject,
 	IExecuteFunctions,
 	IExecuteSingleFunctions,
-	ILoadOptionsFunctions,
-	NodeApiError,
-	JsonObject,
-	sleep,
+	IHookFunctions,
+	ILoadOptionsFunctions
 } from 'n8n-workflow';
 import { omieApiRequest } from './omieApiRequest';
-import { getEndpointForCall } from './utils';
 
+import { getPropertiesForCall } from './utils';
 /**
  * Executes a request to the Omie API, automatically handling pagination.
  **/
@@ -26,55 +25,43 @@ import { getEndpointForCall } from './utils';
 	[key: string]: T[] | number; // Allows dynamic result keys like "clientes_cadastrados"
 }*/
 
-export async function handleRequest<T>(
+export async function handleRequest<T extends IDataObject | IDataObject[] | GenericValue | GenericValue[]>(
 	this: IHookFunctions | IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions,
-	call: string,
-	resultListKey: string,
-	recordsPerPage: number,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	params: any = {},
+	index: number,
+	//params: any = {},
 ): Promise<T[]> {
-	let currentPage = 1;
+	//let currentPage = 1;
 	//let totalPages = 0;
+	const call = this.getNodeParameter('call', index) as string;
+	const endpoint = getPropertiesForCall(call)?.endpoint;
 	const allRecords: T[] = [];
-	const endpoint = getEndpointForCall(call);
 
 	//do {
-		const payload = {
-			call,
-			app_key: (await this.getCredentials('omieAppApi'))!.apiKey,
-			app_secret: (await this.getCredentials('omieAppApi'))!.apiSecret,
-			param: [
-				{
-					...params,
-					filtrar_por_data_de: "15/10/2025",
-					pagina: currentPage,
-					registros_por_pagina: recordsPerPage,
-				},
-			],
-		};
+	const body: IDataObject = {
+		app_key: (await this.getCredentials('omieAppApi'))!.apiKey,
+		app_secret: (await this.getCredentials('omieAppApi'))!.apiSecret,
+		call: call,
+		param: [
+			{
+				pagina: 1,
+				registros_por_pagina: 10,
+				apenas_importado_api: 'N',
+				filtrar_por_data_de: "15/10/2025",
+			},
+		],
+	};
 
-		const response = await omieApiRequest.call(this, 'POST', endpoint, payload)
+	const responseData = await omieApiRequest.call(this, 'POST', endpoint, body)
 
-		//const data = await response.json();
-		const records = response;
+	//const pageResponse = data as OmiePaginatedResponse<T>;
+	//totalPages = pageResponse?.total_de_paginas;
+	//const records = pageResponse[resultListKey] as T[] | undefined;
 
-		/*if (data.faultstring) {
-			throw new NodeApiError(this.getNode(), data as JsonObject);
-		}*/
+	allRecords.push(responseData);
 
-		//const pageResponse = data as OmiePaginatedResponse<T>;
-		//totalPages = pageResponse?.total_de_paginas;
-		//const records = pageResponse[resultListKey] as T[] | undefined;
-
-		// if (records && Array.isArray(records)) {
-		 	allRecords.push(...records);
-		// }
-
-		currentPage++;
-		await sleep(1000);
+	//currentPage++;
+	//await sleep(1000);
 	//} while (currentPage <= totalPages);
-	throw new NodeApiError(this.getNode(), response as JsonObject)
 
-	//return  Array.isArray(allRecords) ? allRecords : [allRecords];
+	return responseData;
 }
