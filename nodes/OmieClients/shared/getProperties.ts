@@ -5,6 +5,7 @@ export const getProperties: INodeProperties[] = [
 		displayName: 'API Method (Call)',
 		name: 'call',
 		type: 'options',
+		noDataExpression: true,
 		options: [
 			{
 				name: 'Listar Clientes',
@@ -34,5 +35,5 @@ export const getProperties: INodeProperties[] = [
 		},
 		default: 100,
 		description: 'Number of records to fetch per API call (page). Max is 500.',
-	},
+	}
 ];
