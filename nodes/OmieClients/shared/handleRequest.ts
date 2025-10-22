@@ -46,8 +46,8 @@ export async function handleRequest<
 				call: call,
 				param: [
 					{
-						pagina: 1,
-						registros_por_pagina: 1,
+						pagina: currentPage,
+						registros_por_pagina: 500,
 						apenas_importado_api: 'N',
 						filtrar_por_data_de: '15/10/2025',
 					},
