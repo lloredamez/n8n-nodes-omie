@@ -52,8 +52,8 @@ export const getProperties: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Type Record',
-				name: 'typeRecord',
+				displayName: 'Tipo De Registro',
+				name: 'TipoDeRegistro',
 				type: 'options',
 				default: 'filtrarApenasAlteracao',
 				options: [
@@ -69,19 +69,26 @@ export const getProperties: INodeProperties[] = [
 				description: 'Filter by type of record',
 			},
 			{
-				displayName: 'Date From',
+				displayName: 'Por Data De',
 				name: 'filtrarPorDataDe',
 				type: 'dateTime',
 				default: '',
 				description: 'Fetch records modified from this date onwards',
 			},
 			{
-				displayName: 'Date To',
+				displayName: 'Por Data Ate',
 				name: 'filtrarPorDataAte',
 				type: 'dateTime',
 				default: '',
 				description: 'Fetch records modified up to this date',
 			},
+			{
+				displayName: 'Incluir a Hora',
+				name: 'incluirHora',
+				type: 'boolean',
+				default: true,
+				description: 'Whether to include time in the date filter',
+			}
 		],
 	},
 ];

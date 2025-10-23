@@ -35,6 +35,8 @@ export async function handleRequest<
 	let currentPage = 1;
 	let totalPages = 1;
 	const call = this.getNodeParameter('call', index) as string;
+	const apenas_importado_api = this.getNodeParameter('apenasImportadoApi', index) as boolean;
+
 	const endpoint = getPropertiesForCall(call)?.endpoint;
 	const allRecords: T[] = [];
 
@@ -46,9 +48,9 @@ export async function handleRequest<
 				call: call,
 				param: [
 					{
+						apenas_importado_api: apenas_importado_api ? 'S' : 'N',
 						pagina: currentPage,
 						registros_por_pagina: 500,
-						apenas_importado_api: 'N',
 						filtrar_por_data_de: '15/10/2025',
 					},
 				],
