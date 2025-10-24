@@ -1,3 +1,8 @@
+import { listRequestParams } from "./types";
+
+type filterDateTime = 'filtrar_por_data_de' | 'filtrar_por_data_ate';
+type filterHour = 'filtrar_por_hora_de' | 'filtrar_por_hora_ate';
+
 export const getPropertiesForCall = (call: string): { endpoint: string, resultListKey: string } => {
 	if (call === 'ListarClientes') {
 		return {
@@ -20,11 +25,32 @@ export const getDateTimeString = (date: Date): string => {
 	return `${day}/${month}/${year}`;
 }
 
-export const hoursString = (date: Date): string => {
+export const getHourString = (date: Date): string => {
 	const hours = String(date.getHours()).padStart(2, '0');
 	const minutes = String(date.getMinutes()).padStart(2, '0');
 
 	return `${hours}:${minutes}`;
+}
+
+export const dateTimeProcess = (
+	dateString: string,
+	includeTime: boolean,
+	keyDate: filterDateTime,
+	keyTime: filterHour
+) => {
+
+	const params: listRequestParams = {};
+	const dateTime = new Date(dateString);
+	const date = getDateTimeString(dateTime);
+	params[keyDate] = date;
+
+	if (includeTime === true) {
+		const time = getHourString(dateTime);
+		params[keyTime] = time;
+	}
+
+	return params;
+
 }
 
 

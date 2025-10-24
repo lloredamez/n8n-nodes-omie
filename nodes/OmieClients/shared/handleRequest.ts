@@ -1,17 +1,15 @@
-import {
-	GenericValue,
-	IDataObject,
-	IExecuteFunctions,
-	IExecuteSingleFunctions,
-	IHookFunctions,
-	ILoadOptionsFunctions,
-	sleep,
-} from 'n8n-workflow';
-import { omieApiRequest } from './omieApiRequest';
-import { getPropertiesForCall } from './utils';
 /**
  * Executes a request to the Omie API, automatically handling pagination.
  **/
+
+import {
+	GenericValue,
+	IDataObject,
+	sleep,
+} from 'n8n-workflow';
+import { omieApiRequest } from './omieApiRequest';
+import { listRequestParams, thisIFunctions } from './types';
+import { getPropertiesForCall } from './utils';
 
 
 /**
@@ -29,7 +27,8 @@ interface OmiePaginatedResponse<T> {
 export async function handleRequest<
 	T extends IDataObject | IDataObject[] | GenericValue | GenericValue[],
 >(
-	this: IHookFunctions | IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions,
+	this: thisIFunctions,
+	params: listRequestParams,
 	index: number,
 ): Promise<T[]> {
 	let currentPage = 1;
@@ -48,6 +47,7 @@ export async function handleRequest<
 				call: call,
 				param: [
 					{
+						...params,
 						apenas_importado_api: apenas_importado_api ? 'S' : 'N',
 						pagina: currentPage,
 						registros_por_pagina: 500,

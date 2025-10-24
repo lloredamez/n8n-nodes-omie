@@ -7,7 +7,8 @@ import {
 	NodeConnectionTypes,
 } from 'n8n-workflow';
 
-import { getProperties } from './shared/getProperties';
+import { getClientsParams } from './clients/getClients';
+import { getProperties } from './clients/getProperties';
 import { handleRequest } from './shared/handleRequest';
 
 export class OmieClients implements INodeType {
@@ -39,7 +40,8 @@ export class OmieClients implements INodeType {
 		const returnData: IDataObject[] = [];
 
 		for (let index: number = 0; index < items.length; index++) {
-			const responseData = await handleRequest.call(this, index);
+			const params = getClientsParams.call(this, index);
+			const responseData = await handleRequest.call(this, params, index);
 			returnData.push(...(responseData as IDataObject[]));
 		}
 		return [this.helpers.returnJsonArray(returnData)];
