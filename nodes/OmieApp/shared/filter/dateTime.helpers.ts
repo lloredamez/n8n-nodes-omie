@@ -2,12 +2,12 @@ import {
 	IDataObject,
 } from 'n8n-workflow';
 
-import { thisIFunctions } from '../shared/types';
-import { dateTimeProcess } from '../shared/utils';
+import { thisIFunctions } from '../types';
+import { dateTimeProcess } from '../utils';
 
-export function getClientsParams(this: thisIFunctions, index: number): IDataObject {
+export function filterParams(this: thisIFunctions, index: number): IDataObject {
 
-	const filter = this.getNodeParameter('filter', index) as IDataObject;
+	const filter = this.getNodeParameter('filterOptions', index) as IDataObject;
 	const params: IDataObject = {}
 
 	if (Object.keys(filter).length === 0) {

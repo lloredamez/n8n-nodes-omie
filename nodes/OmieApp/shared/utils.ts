@@ -4,7 +4,7 @@ type filterDateTime = 'filtrar_por_data_de' | 'filtrar_por_data_ate';
 type filterHour = 'filtrar_por_hora_de' | 'filtrar_por_hora_ate';
 
 export const getPropertiesForCall = (call: string): { endpoint: string, resultListKey: string } => {
-	if (call === 'ListarClientes') {
+	if (call === 'listarClientes') {
 		return {
 			endpoint: 'geral/clientes/',
 			resultListKey: 'clientes_cadastro'

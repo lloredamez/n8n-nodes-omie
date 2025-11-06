@@ -5,7 +5,7 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export class OmieAppApi implements ICredentialType {
+export class OmieAccessApi implements ICredentialType {
 	name = 'omieAccessApi';
 	displayName = 'App Key API';
 	icon: Icon = 'file:../../icons/omie.svg';

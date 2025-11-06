@@ -6,8 +6,8 @@ import {
 	INodeTypeDescription,
 	NodeConnectionTypes,
 } from 'n8n-workflow';
-import { dateTimeProperties } from './shared/dateTimeProperties';
-import { router } from './shared/router';
+import { dateTimeProperties } from './shared/filter/dateTime.properties';
+import { operationManager } from './shared/operationManager';
 
 export class OmieApp implements INodeType {
 	description: INodeTypeDescription = {
@@ -110,6 +110,33 @@ export class OmieApp implements INodeType {
 				]
 			},
 			{
+				displayName: 'CNPJ/CPF',
+				name: 'cnpjCpf',
+				type: 'string',
+				default: '',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['cliente'],
+						operation: ['consultarCliente'],
+					},
+				},
+				description: 'CNPJ ou CPF do cliente a ser consultado',
+			},
+			{
+				displayName: 'Apenas Importado Via API',
+				name: 'apenasImportadoApi',
+				type: 'boolean',
+				default: false,
+				description: 'Whether to return only records imported via API',
+				displayOptions: {
+					show: {
+						resource: ['cliente', 'pedido'],
+						operation: ['listarClientes', 'listarClientesResumido', 'listarPedidos'],
+					},
+				},
+			},
+			{
 				displayName: 'Filter Options',
 				name: 'filterOptions',
 				type: 'collection',
@@ -131,9 +158,16 @@ export class OmieApp implements INodeType {
 			const resource = this.getNodeParameter('resource', index) as string;
 			const operation = this.getNodeParameter('operation', index) as string;
 
-			const responseData = await router.call(this, resource, operation, index);
+			const responseData = await operationManager.call(this, resource, operation, index);
 			returnData.push(...(responseData as IDataObject[]));
 		}
+
+
+		/* 	if (cnpj_cpf) {
+			params['clientesFiltro'] = [{
+				'cnpj_cpf': cnpj_cpf
+			}]
+		} */
 		return [this.helpers.returnJsonArray(returnData)];
 	};
 }

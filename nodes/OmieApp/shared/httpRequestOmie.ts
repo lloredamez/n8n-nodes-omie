@@ -16,7 +16,7 @@ export async function omieApiRequest(
 ) {
 	const options: IHttpRequestOptions = {
 		method: method,
-		url: `https://webhook.site/d60b48fa-8933-49c2-a964-23239a3b958b`,
+		url: `https://app.omie.com.br/api/v1/${endpoint}`,
 		body,
 		headers: {
 			'Content-Type': 'application/json',
